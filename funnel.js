@@ -68,6 +68,26 @@ class SeparatedLineBuilder {
 
 class Funnel {
   _funnelContents = [];
+  _delims = ['\\', '/'];
+
+  constructor(funnelProperties) {
+    if(funnelProperties.delims) {
+      if (funnelProperties.delims[0]) {
+        this._delims[0] = funnelProperties.delims[0];
+      }
+      if (funnelProperties.delims[1]) {
+        this._delims[1] = funnelProperties.delims[1];
+      }
+    }
+  }
+
+  set leftDelim(char) {
+    this._delims[0] = char;
+  }
+
+  set rightDelim(char) {
+    this._delims[1] = char;
+  }
 
   fill(...values) {
     if (this._funnelContents.length) {
@@ -91,7 +111,6 @@ class Funnel {
                 - this._funnelContents[this._funnelContents.length - 1].lineValues.length));
       }
     }
-
 
     for (let i = this._funnelContents.length + 1; values.length && i < 6; i++) {
       if (values[i] !== undefined) {
@@ -166,7 +185,7 @@ class Funnel {
     let nums = '';
     let spacesCount = 1;
     for (let i = 5; i > 0; i -= 1) {
-      str += '\\';
+      str += this._delims[0];
       for (let j = 0; j < i; j += 1) {
         if (this._funnelContents[i - 1] !== undefined && this._funnelContents[i - 1].lineValues[j] !== undefined) {
           nums += this._funnelContents[i - 1].lineValues[j] + (j !== i - 1 ? ' ' : '');
@@ -174,7 +193,7 @@ class Funnel {
           nums += ` ${j !== i - 1 ? ' ' : ''}`;
         }
       }
-      str += `${nums}/\n${' '.repeat(spacesCount)}`;
+      str += `${nums + this._delims[1]}\n${' '.repeat(spacesCount)}`;
       nums = '';
       spacesCount += 1;
     }
