@@ -89,6 +89,18 @@ class Funnel {
     this._delims[1] = char;
   }
 
+  constructor(funnelProperties) {
+    if (funnelProperties.type !== undefined) {
+      if (funnelProperties.type === 0 || funnelProperties.type === 1) {
+        this._type = funnelProperties.type;
+      } else {
+        throw new Error('Incorrect funnel type value');
+      }
+    } else {
+      throw new Error('Missed required property: type');
+    }
+  }
+
   fill(...values) {
     if (this._funnelContents.length) {
       for (let i = 0; i < this._funnelContents.length; i++) {
@@ -130,17 +142,32 @@ class Funnel {
   calculateWeight(row, col) {
     let line = this._funnelContents[row].lineValues;
 
-    if (line[col] !== undefined && line[col] !== ' ') {
-      let weight = 1;
-      for (let i = row + 1, j = 0; i < this._funnelContents.length; i++, j += 1) {
-        let curLine = this._funnelContents[i].lineValues;
-        for (let k = col; k <= col + j + 1; k += 1) {
-          if (curLine[k] !== undefined && curLine[k] !== ' ') {
-            weight += 1;
+    if(this._type === 0) {
+      if (line[col] !== undefined && line[col] !== ' ') {
+        let weight = line[col].toInteger;
+        for (let i = row + 1, j = 0; i < this._funnelContents.length; i += 1, j += 1) {
+          let curLine = this._funnelContents[i].lineValues;
+          for (let k = col; k <= col + j + 1; k += 1) {
+            if (curLine[k] !== undefined && curLine[k] !== ' ') {
+              weight += curLine[k];
+            }
           }
         }
+        return weight;
       }
-      return weight;
+    } else {
+      if (line[col] !== undefined && line[col] !== ' ') {
+        let weight = 1;
+        for (let i = row + 1, j = 0; i < this._funnelContents.length; i++, j += 1) {
+          let curLine = this._funnelContents[i].lineValues;
+          for (let k = col; k <= col + j + 1; k += 1) {
+            if (curLine[k] !== undefined && curLine[k] !== ' ') {
+              weight += 1;
+            }
+          }
+        }
+        return weight;
+      }
     }
     return 0;
   }
