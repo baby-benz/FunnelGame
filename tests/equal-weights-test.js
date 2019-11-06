@@ -5,8 +5,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 let Functionality_test = require('assert');
 
-describe("Number Elements Tests --- Testing for correctness of solution", function () {
-  it("It should works for number elements.", function () {
+describe("Equal Weight Tests --- Testing for correctness of solution", function () {
+  it("It should works assuming that the weights of all elements are equal.", function () {
     let funnel = new _funnel.default({type: 1});
     funnel.fill(8);
     let now = `\\         /
