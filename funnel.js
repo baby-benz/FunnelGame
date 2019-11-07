@@ -21,28 +21,28 @@ exports.default = void 0;
 
 class SeparatedLine {
     constructor(properties) {
-        this._lineValues = properties._lineValues;
-        this._lineLayer = properties._lineLayer;
+        this._values = properties._values;
+        this._layer = properties._layer;
     }
 
     set lineLayer(num) {
-        this._lineLayer = num;
+        this._layer = num;
     }
 
     set lineValues(array) {
-        this._lineValues = array;
+        this._values = array;
     }
 
     set specificLineValue(valObj) {
-        this._lineValues[valObj.pos] = valObj.val;
+        this.lineValues[valObj.pos] = valObj.val;
     }
 
     get lineLayer() {
-        return this._lineLayer;
+        return this._layer;
     }
 
     get lineValues() {
-        return this._lineValues;
+        return this._values;
     }
 }
 
@@ -50,13 +50,13 @@ class SeparatedLineBuilder {
     constructor(lineProperties) {
         this._line = new SeparatedLine(
             {
-                _lineValues: lineProperties.lineValues,
-                _lineLayer: lineProperties.lineLayer,
+                _values: lineProperties._values,
+                _layer: lineProperties._layer,
             });
     }
 
     set lineValues(array) {
-        this._line._lineValues = array;
+        this._line.lineValues = array;
     }
 
     set specificLineValue(valObj) {
@@ -134,13 +134,13 @@ class Funnel {
         for (let i = this._funnelContents.length + 1; values.length && i < 6; i++) {
             if (values[i] !== undefined) {
                 this._funnelContents.push(new SeparatedLineBuilder({
-                    lineValues: values.splice(0, i),
-                    lineLayer: i,
+                    _values: values.splice(0, i),
+                    _layer: i,
                 }));
             } else {
                 this._funnelContents.push(new SeparatedLineBuilder({
-                    lineValues: values.splice(0, values.length),
-                    lineLayer: i,
+                    _values: values.splice(0, values.length),
+                    _layer: i,
                 }));
             }
         }
