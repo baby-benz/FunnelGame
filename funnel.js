@@ -14,6 +14,13 @@ class MissedPropertyError extends ValidationError {
     }
 }
 
+class SparseArrayAssignmentError extends ValidationError {
+    constructor(property) {
+        super(property + " function arguments could not be a sparse array");
+        this.property = property;
+    }
+}
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -104,6 +111,14 @@ class Funnel {
         }
     }
 
+    set delims(charArray) {
+        if (Array.isArray(charArray) && charArray[0] !== undefined && charArray[1] !== undefined) {
+            this._delims = charArray;
+        } else {
+            throw new SparseArrayAssignmentError('Funnel.delims');
+        }
+    }
+
     set leftDelim(char) {
         this._delims[0] = char;
     }
@@ -162,7 +177,7 @@ class Funnel {
                 }
                 return weight;
             }
-        } else {
+        } else if (this._type === 1) {
             if (line[col] !== undefined && line[col] !== ' ') {
                 let weight = 1;
                 for (let i = row + 1, j = 0; i < this._funnelContents.length; i++, j += 1) {
@@ -175,8 +190,9 @@ class Funnel {
                 }
                 return weight;
             }
+        } else {
+            console.log("Funnel elements can only be of two types: 0 or 1");
         }
-        return 0;
     }
 
     drip() {
