@@ -25,7 +25,7 @@ describe("Different Delimiters Tests --- Testing for correctness of solution", f
         console.log("Testing with \u0061\u030A delims\nNow the funnel should be:\n" + now);
         Functionality_test.equal(funnel.toString(), now);
 
-        funnel.delims = ['\u{1F639}','\u{1F639}'];
+        funnel.leftDelim = funnel.rightDelim = ['\u{1F639}','\u{1F639}'];
         now = `\u{1F639}         \u{1F639}
  \u{1F639}       \u{1F639}
   \u{1F639}     \u{1F639}
