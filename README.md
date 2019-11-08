@@ -1,4 +1,4 @@
-# Project Title
+# Funnel Game
 
 Simple Funnel Game with extended functionality.
 
