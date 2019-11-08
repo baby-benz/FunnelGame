@@ -7,6 +7,18 @@ let Functionality_test = require('assert');
 
 describe("Basic Tests", function () {
     it("It should works for basic tests.", function () {
+        try {
+            let funnel = new _funnel.default({type: 8})
+        } catch (e) {
+            console.log("\nRangeError for funnel type error triggered");
+        }
+
+        try {
+            let funnel = new _funnel.default()
+        } catch (e) {
+            console.log("\nMissedPropertyError for funnel type error triggered");
+        }
+
         let funnel = new _funnel.default({type: 1});
         let now = `\\         /
  \\       /
