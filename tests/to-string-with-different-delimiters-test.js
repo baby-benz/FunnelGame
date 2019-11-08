@@ -33,7 +33,5 @@ describe("Different Delimiters Tests --- Testing for correctness of solution", f
     \u{1F639} \u{1F639}`;
         console.log("Testing with \u{1F639} delims\nNow the funnel should be:\n" + now);
         Functionality_test.equal(funnel.toString(), now);
-
-
     })
 });

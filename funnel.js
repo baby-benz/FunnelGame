@@ -28,30 +28,6 @@ exports.default = void 0;
 
 class SeparatedLine {
     constructor(properties) {
-<<<<<<< HEAD
-        this._lineValues = properties._lineValues;
-        this._lineLayer = properties._lineLayer;
-    }
-
-    set lineLayer(num) {
-        this._lineLayer = num;
-    }
-
-    set lineValues(array) {
-        this._lineValues = array;
-    }
-
-    set specificLineValue(valObj) {
-        this._lineValues[valObj.pos] = valObj.val;
-    }
-
-    get lineLayer() {
-        return this._lineLayer;
-    }
-
-    get lineValues() {
-        return this._lineValues;
-=======
         this._values = properties._values;
         this._layer = properties._layer;
     }
@@ -74,30 +50,22 @@ class SeparatedLine {
 
     get lineValues() {
         return this._values;
->>>>>>> feature/exception-handlers
     }
+
+
 }
 
 class SeparatedLineBuilder {
     constructor(lineProperties) {
         this._line = new SeparatedLine(
             {
-<<<<<<< HEAD
-                _lineValues: lineProperties.lineValues,
-                _lineLayer: lineProperties.lineLayer,
-=======
                 _values: lineProperties._values,
                 _layer: lineProperties._layer,
->>>>>>> feature/exception-handlers
             });
     }
 
     set lineValues(array) {
-<<<<<<< HEAD
-        this._line._lineValues = array;
-=======
         this._line.lineValues = array;
->>>>>>> feature/exception-handlers
     }
 
     set specificLineValue(valObj) {
@@ -130,31 +98,6 @@ class Funnel {
             if (funnelProperties.type === 0 || funnelProperties.type === 1) {
                 this._type = funnelProperties.type;
             } else {
-<<<<<<< HEAD
-                throw new Error('Incorrect funnel type value');
-            }
-        } else {
-            throw new Error('Missed required property: type');
-        }
-        if (funnelProperties.delims) {
-            if (funnelProperties.delims[0]) {
-                this._delims[0] = funnelProperties.delims[0];
-            }
-            if (funnelProperties.delims[1]) {
-                this._delims[1] = funnelProperties.delims[1];
-            }
-        }
-    }
-
-    set delims(charArray) {
-        if (charArray[0] && charArray[1]) {
-            this._delims = charArray;
-        } else {
-            throw new Error('Both delimiters must be assigned valid values');
-        }
-    }
-
-=======
                 throw new RangeError('Incorrect funnel type value');
             }
         } else {
@@ -178,7 +121,6 @@ class Funnel {
         }
     }
 
->>>>>>> feature/exception-handlers
     set leftDelim(char) {
         this._delims[0] = char;
     }
@@ -187,6 +129,10 @@ class Funnel {
         this._delims[1] = char;
     }
 
+    /**
+     *
+     * @param {array} values - values you want to fill the funnel with
+     */
     fill(...values) {
         if (this._funnelContents.length) {
             for (let i = 0; i < this._funnelContents.length; i++) {
@@ -200,34 +146,15 @@ class Funnel {
                     }
                 }
             }
-<<<<<<< HEAD
-
-            if (this._funnelContents[this._funnelContents.length - 1].lineValues.length <
-                this._funnelContents[this._funnelContents.length - 1].lineLayer) {
-                this._funnelContents[this._funnelContents.length - 1].lineValues =
-                    this._funnelContents[this._funnelContents.length - 1].lineValues.concat(values.splice(0,
-                        this._funnelContents[this._funnelContents.length - 1].lineLayer
-                        - this._funnelContents[this._funnelContents.length - 1].lineValues.length));
-=======
             let lastLine = this._funnelContents[this._funnelContents.length - 1];
             if (lastLine.lineValues.length < lastLine.lineLayer) {
                 lastLine.lineValues = lastLine.lineValues.concat(values.splice(0, lastLine.lineLayer - lastLine.lineValues.length));
->>>>>>> feature/exception-handlers
             }
         }
 
         for (let i = this._funnelContents.length + 1; values.length && i < 6; i++) {
             if (values[i] !== undefined) {
                 this._funnelContents.push(new SeparatedLineBuilder({
-<<<<<<< HEAD
-                    lineValues: values.splice(0, i),
-                    lineLayer: i,
-                }));
-            } else {
-                this._funnelContents.push(new SeparatedLineBuilder({
-                    lineValues: values.splice(0, values.length),
-                    lineLayer: i,
-=======
                     _values: values.splice(0, i),
                     _layer: i,
                 }));
@@ -235,12 +162,17 @@ class Funnel {
                 this._funnelContents.push(new SeparatedLineBuilder({
                     _values: values.splice(0, values.length),
                     _layer: i,
->>>>>>> feature/exception-handlers
                 }));
             }
         }
     }
 
+    /**
+     *
+     * @param {number} row - the index of the row the current element is on
+     * @param {number} col - the index of the column the current element is on
+     * @returns {_.toInteger|*|Number|NumberConstructor|Object.toInteger|number} - the sum of all elements above this element
+     */
     calculateWeight(row, col) {
         let line = this._funnelContents[row].lineValues;
 
@@ -257,23 +189,6 @@ class Funnel {
                 }
                 return weight;
             }
-<<<<<<< HEAD
-        } else {
-            if (line[col] !== undefined && line[col] !== ' ') {
-                let weight = 1;
-                for (let i = row + 1, j = 0; i < this._funnelContents.length; i++, j += 1) {
-                    let curLine = this._funnelContents[i].lineValues;
-                    for (let k = col; k <= col + j + 1; k += 1) {
-                        if (curLine[k] !== undefined && curLine[k] !== ' ') {
-                            weight += 1;
-                        }
-                    }
-                }
-                return weight;
-            }
-        }
-        return 0;
-=======
         } else if (this._type === 1) {
             if (line[col] !== undefined && line[col] !== ' ') {
                 let weight = 1;
@@ -290,9 +205,12 @@ class Funnel {
         } else {
             console.log("Funnel elements can only be of two types: 0 or 1");
         }
->>>>>>> feature/exception-handlers
     }
 
+    /**
+     *
+     * @returns {string|null} - element that was removed or null if the funnel is empty
+     */
     drip() {
         if (this._funnelContents.length) {
             let output = this._funnelContents[0].lineValues[0];
@@ -327,6 +245,10 @@ class Funnel {
         return null;
     }
 
+    /**
+     *
+     * @returns {string} - returns a string in a human-friendly form
+     */
     toString() {
         let str = '';
         let nums = '';
