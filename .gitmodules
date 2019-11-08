@@ -1,3 +1,6 @@
 [submodule "standard"]
 	path = standard
 	url = https://github.com/standard/standard
+[submodule "stringz"]
+	path = stringz
+	url = https://github.com/sallar/stringz
