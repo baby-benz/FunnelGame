@@ -92,6 +92,7 @@ class SeparatedLineBuilder {
 class Funnel {
     _funnelContents = [];
     _delims = ['\\', '/'];
+    _isReversed = false;
 
     constructor(funnelProperties) {
         if (funnelProperties.type !== undefined) {
@@ -245,6 +246,11 @@ class Funnel {
         return null;
     }
 
+    reverse() {
+        this._funnelContents.reverse();
+        this._isReversed = !this._isReversed;
+    }
+
     /**
      *
      * @returns {string} - returns a string in a human-friendly form
@@ -252,21 +258,43 @@ class Funnel {
     toString() {
         let str = '';
         let nums = '';
-        let spacesCount = 1;
-        for (let i = 5; i > 0; i -= 1) {
-            str += this._delims[0];
-            for (let j = 0; j < i; j += 1) {
-                if (this._funnelContents[i - 1] !== undefined && this._funnelContents[i - 1].lineValues[j] !== undefined) {
-                    nums += this._funnelContents[i - 1].lineValues[j] + (j !== i - 1 ? ' ' : '');
-                } else {
-                    nums += ` ${j !== i - 1 ? ' ' : ''}`;
+        let spacesCount;
+        if (!this._isReversed) {
+            spacesCount = 1;
+            for (let i = 5; i > 0; i -= 1) {
+                str += this._delims[0];
+                for (let j = 0; j < i; j += 1) {
+                    if (this._funnelContents[i - 1] !== undefined && this._funnelContents[i - 1].lineValues[j] !== undefined) {
+                        nums += this._funnelContents[i - 1].lineValues[j] + (j !== i - 1 ? ' ' : '');
+                    } else {
+                        nums += ` ${j !== i - 1 ? ' ' : ''}`;
+                    }
                 }
+                str += `${nums + this._delims[1]}\n${' '.repeat(spacesCount)}`;
+                nums = '';
+                spacesCount += 1;
+
             }
-            str += `${nums + this._delims[1]}\n${' '.repeat(spacesCount)}`;
-            nums = '';
-            spacesCount += 1;
+            return str.substring(0, str.length - 6);
+        } else {
+            spacesCount = 4;
+            let k = 1;
+            for (let i = 5; i > 0; i -= 1) {
+                str += `${' '.repeat(spacesCount)}${this._delims[1]}`;
+                for (let j = 0; j < k; j += 1) {
+                    if (this._funnelContents[i - 1] !== undefined && this._funnelContents[i - 1].lineValues[j] !== undefined) {
+                        nums += this._funnelContents[i - 1].lineValues[j] + (j !== k - 1 ? ' ' : '');
+                    } else {
+                        nums += ` ${j !== i + 1 ? ' ' : ''}`;
+                    }
+                }
+                str += `${nums + this._delims[0]}\n`;
+                nums = '';
+                spacesCount -= 1;
+                k += 1;
+            }
+            return str.substring(0, str.length - 1);
         }
-        return str.substring(0, str.length - 6);
     }
 }
 
