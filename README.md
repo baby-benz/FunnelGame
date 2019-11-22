@@ -20,3 +20,7 @@ npm install mocha
 * **Kobtsev Nikita** - *Initial work* - [Baby-Benz](https://github.com/baby-benz)
 
 See also the list of [contributors](https://github.com/baby-benz/FunnelGame/contributors) who participated in this project.
+
+## Forked by
+
+* **Nikolay Shmendyuk** - *my repo* - [Nshmendyuk](https://github.com/Nshmendyuk).
